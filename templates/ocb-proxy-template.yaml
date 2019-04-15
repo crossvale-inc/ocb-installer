@@ -1,0 +1,153 @@
+apiVersion:                            v1
+kind:                                  Template
+metadata:
+  name:                                ocb-proxy-template
+labels:
+  app:                                 ocb
+objects:
+- apiVersion:                          v1
+  kind:                                ImageStream
+  metadata:
+    name:                              ocb-proxy
+    namespace:                         ${OCB_PROJECT_NAME}
+  spec:
+    dockerImageRepository:             ${REDHAT_DOCKER_REGISTRY_URL}/${REDHAT_PROXY_RELATIVE_IMAGE_PATH}
+- apiVersion:                          oauth.openshift.io/v1
+  kind:                                OAuthClient
+  metadata:
+    name:                              ocb-proxy-${OCB_PROJECT_NAME}
+  redirectURIs:
+  - https://${OCB_PUBLIC_HOSTNAME}/oauth/callback
+  secret:                              ${OAUTH_PROXY_CLIENT_SECRET}
+- apiVersion:                          v1
+  kind:                                DeploymentConfig
+  metadata:
+    name:                              ocb-proxy
+    namespace:                         ${OCB_PROJECT_NAME}
+  spec:
+    replicas:                          1
+    selector:
+      deploymentconfig:                ocb-proxy
+    strategy:
+      activeDeadlineSeconds:           21600
+      resources:                       {}
+      rollingParams:
+        intervalSeconds:               1
+        maxSurge:                      25%
+        maxUnavailable:                25%
+        timeoutSeconds:                600
+        updatePeriodSeconds:           1
+      type:                            Rolling
+    template:
+      metadata:
+        labels:
+          deploymentconfig:            ocb-proxy
+      spec:
+        containers:
+        - args:
+          - --upstream=http://ocb-backend.${OCB_PROJECT_NAME}.svc:9000/api/
+          - --upstream=http://ocb-ui.${OCB_PROJECT_NAME}.svc:8080/
+          - --provider=openshift
+          - --http-address=:8080
+          - --https-address=
+          - --cookie-secret=${OAUTH_PROXY_COOKIE_SECRET}
+          - --client-id=ocb-proxy-${OCB_PROJECT_NAME}
+          - --client-secret=${OAUTH_PROXY_CLIENT_SECRET}
+          - --pass-user-bearer-token
+          - --skip-auth-preflight
+          - '-openshift-delegate-urls={"/api/": {"resource": "namespaces", "verb": "get", "resourceName": "${OCB_PROJECT_NAME}", "namespace": "${OCB_PROJECT_NAME}"}}'
+          image:                       ''
+          imagePullPolicy:             IfNotPresent
+          name:                        ocb-proxy
+          resources:
+            limits:
+              cpu:                     300m
+              memory:                  100Mi
+          terminationMessagePath:      /dev/termination-log
+          terminationMessagePolicy:    File
+        dnsPolicy:                     ClusterFirst
+        restartPolicy:                 Always
+        schedulerName:                 default-scheduler
+        securityContext:               {}
+        serviceAccount:                ${OCB_SERVICE_ACCOUNT}
+        serviceAccountName:            ${OCB_SERVICE_ACCOUNT}
+        terminationGracePeriodSeconds: 30
+    test:                              false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic:                     true
+        containerNames:
+        - ocb-proxy
+        from:
+          kind:                        ImageStreamTag
+          name:                        ocb-proxy:${OAUTH_PROXY_VERSION}
+          namespace:                   ${OCB_PROJECT_NAME}
+      type:                            ImageChange
+- apiVersion:                          v1
+  kind:                                Service
+  metadata:
+    name:                              ocb-proxy
+    namespace:                         ${OCB_PROJECT_NAME}
+  spec:
+    ports:
+    - name:                            http
+      port:                            8080
+      protocol:                        TCP
+      targetPort:                      8080
+    - name:                            https
+      port:                            443
+      protocol:                        TCP
+      targetPort:                      443
+    selector:
+      deploymentconfig:                ocb-proxy
+    sessionAffinity:                   None
+    type:                              ClusterIP
+- apiVersion:                          v1
+  kind:                                Route
+  metadata:
+    name:                              ocb-proxy
+    namespace:                         ${OCB_PROJECT_NAME}
+  spec:
+    host:                              ${OCB_PUBLIC_HOSTNAME}
+    port:
+      targetPort:                      http
+    tls:
+      insecureEdgeTerminationPolicy:   Redirect
+      termination:                     edge
+    to:
+      kind:                            Service
+      name:                            ocb-proxy
+      weight:                          100
+    wildcardPolicy:                    None
+parameters:
+  - description:                       Name of the project where OCB will be/is deployed in.
+    name:                              OCB_PROJECT_NAME
+    required:                          true
+    value:                             'ocb'
+  - description:                       OAuth-proxy's version to deploy.
+    name:                              OAUTH_PROXY_VERSION
+    required:                          true
+  - description:                       URL of RedHat's docker registry where to pull OAuth-proxy images from.
+    name:                              REDHAT_DOCKER_REGISTRY_URL
+    required:                          true
+    value:                             'registry.access.redhat.com'
+  - description:                       Relative URL of the docker registry where to pull OAuth-proxy image from.
+    name:                              REDHAT_PROXY_RELATIVE_IMAGE_PATH
+    required:                          true
+    value:                             'openshift3/oauth-proxy'
+  - description:                       The OAuth Client Secret
+    name:                              OAUTH_PROXY_CLIENT_SECRET
+    required:                          true
+    value:                             'abcdefghijklmnopqrstuvwxyz'
+  - description:                       The seed string for secure cookies (optionally base64 encoded)
+    name:                              OAUTH_PROXY_COOKIE_SECRET
+    required:                          true
+    value:                             'ashdfjhasdlkjfhalksdjhflak'
+  - description:                       The public hostname for the route to access OCB from outside the OCP cluster.
+    name:                              OCB_PUBLIC_HOSTNAME
+    required:                          true
+  - description:                       Name of the service account to create with cluster-admin rights to run OCB.
+    name:                              OCB_SERVICE_ACCOUNT
+    required:                          true
+    value:                             'ocb-system'

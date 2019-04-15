@@ -1,0 +1,23 @@
+---
+- hosts: seed-hosts[0]
+  gather_facts: False
+  serial: 1
+  tasks:
+
+  - name: Load variable files
+    include_vars:
+      dir: "{{ params_dir }}/"
+      depth: 1
+      extensions:
+        - yaml
+        - yml
+
+  - name: Check that Skopeo is locally installed...
+    shell: "skopeo --version"
+
+  - name: Download docker image for all OCB microservices
+    include_role:
+      name: skopeo-downloader
+    with_items: "{{ skopeo_ocb_images }}"
+    loop_control:
+      loop_var: entry

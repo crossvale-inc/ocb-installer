@@ -1,0 +1,35 @@
+apiVersion:                            v1
+kind:                                  Template
+metadata:
+  name:                                ocb-prerequisites
+labels:
+  app:                                 ocb
+objects:
+- apiVersion:     apiextensions.k8s.io/v1beta1 
+  kind:           CustomResourceDefinition
+  metadata:
+    name:         ocbfleets.ocb.crossvale.com
+  spec:
+    group:        ocb.crossvale.com
+    version:      v1
+    scope:        Namespaced
+    names:
+      plural:     ocbfleets
+      singular:   ocbfleet
+      kind:       OcbFleet
+      shortNames:
+      - ofl
+- apiVersion: apiextensions.k8s.io/v1beta1 
+  kind: CustomResourceDefinition
+  metadata:
+    name: ocbevents.ocb.crossvale.com 
+  spec:
+    group: ocb.crossvale.com 
+    version: v1
+    scope: Namespaced 
+    names:
+      plural: ocbevents
+      singular: ocbevent
+      kind: OcbEvent
+      shortNames:
+      - oev 

@@ -1,0 +1,71 @@
+apiVersion:            v1
+kind:                  Template
+metadata:
+  name:                ocb-prerequisites-template
+labels:
+  app:                 ocb
+objects:
+- apiVersion:          v1
+  kind:                ProjectRequest
+  metadata:
+    name:              ${OCB_PROJECT_NAME}
+  description:         '${OCB_PROJECT_DESCRIPTION}'
+  displayName:         '${OCB_PROJECT_DISPLAY_NAME}'
+- apiVersion:          v1
+  kind:                Secret
+  stringData:
+    .dockerconfigjson: '{"auths":{"${OCB_DOCKER_REGISTRY_URL}":{"username":"${OCB_DOCKER_REGISTRY_USERNAME}","password":"${OCB_DOCKER_REGISTRY_PASSWORD}","email":"ocb@crossvale.com","auth":"${OCB_DOCKER_REGISTRY_AUTH}"}}}'
+  metadata:
+    name:              ocb-docker-registry
+    namespace:         ${OCB_PROJECT_NAME}
+  type:                kubernetes.io/dockerconfigjson
+- apiVersion:          v1
+  kind:                ServiceAccount
+  metadata:
+    name:              ${OCB_SERVICE_ACCOUNT}
+    namespace:         ${OCB_PROJECT_NAME}
+  imagePullSecrets:
+  - name: ocb-docker-registry
+- apiVersion:          v1
+  groupNames:          null
+  kind:                ClusterRoleBinding
+  metadata:
+    name:              ocb-cluster-admin-service-account
+  roleRef:
+    name:              cluster-admin
+  subjects:
+  - kind:              ServiceAccount
+    name:              ${OCB_SERVICE_ACCOUNT}
+    namespace:         ${OCB_PROJECT_NAME}
+  userNames:
+  - system:serviceaccount:${OCB_PROJECT_NAME}:${OCB_SERVICE_ACCOUNT}
+parameters:
+  - description:       Name of the project where OCB will be/is deployed in.
+    name:              OCB_PROJECT_NAME
+    required:          true
+    value:             'ocb'
+  - description:       Display name of the project OCB.
+    name:              OCB_PROJECT_DISPLAY_NAME
+    required:          true
+    value:             'OCB :: OpenShift CloudBalancer'
+  - description:       Description of the project OCB.
+    name:              OCB_PROJECT_DESCRIPTION
+    required:          false
+    value:             ''
+  - description:       Name of the service account to create with cluster-admin rights to run OCB.
+    name:              OCB_SERVICE_ACCOUNT
+    required:          true
+    value:             'ocb-system'
+  - description:       URL of the docker registry where to pull OCB images from.
+    name:              OCB_DOCKER_REGISTRY_URL
+    required:          true
+    value:             'registry.apps.crossvale-ocp.com:443'
+  - description:       Username to validate in the docker registry where to pull OCB images from.
+    name:              OCB_DOCKER_REGISTRY_USERNAME
+    required:          true
+  - description:       Password to validate in the docker registry where to pull OCB images from.
+    name:              OCB_DOCKER_REGISTRY_PASSWORD
+    required:          true
+  - description:       Token to validate in the docker registry where to pull OCB images from.
+    name:              OCB_DOCKER_REGISTRY_AUTH
+    required:          true

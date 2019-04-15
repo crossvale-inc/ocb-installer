@@ -1,0 +1,18 @@
+
+Step 1: clone to box
+
+To install OCB:
+===============
+Step 2: `ansible-galaxy install -r requirements.yaml -p playbooks/roles` (this will install the roles locally instead of in /etc/ansible/roles)
+Step 3: copy the folder ./inventory/local to create your target environment, for instance, to ./inventory/dev-crossvale/ and fill out the hosts file, the config.js, the OCP inventory and ssh_config according to your needs.
+
+WARNING!! This installer is meant to work with an external docker registry to pull the images from. Not to push OCB images directly to the OCP's internal registry.
+Step 4: ansible-playbook -i /inventory/<target environment>/hosts playbooks/prepare-images.yaml, to pull the images from Crossvale's Official Docker registry and push them to your Stagging docker registry in Nexus or Artifactory.
+
+Step 5: ansible-playbook -i /inventory/<target environment>/hosts playbooks/install.yaml
+
+To uninstall OCB:
+=================
+WARNING!! The CRDs are not deleted in case there is more than one deployment within the same OCP cluster.
+Step 2: ansible-playbook -i /inventory/<target environment>/hosts playbooks/uninstall.yaml
+

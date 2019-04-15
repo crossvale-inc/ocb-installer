@@ -1,0 +1,543 @@
+{
+  "IamFleetRole": "arn:aws:iam::803902225147:role/aws-ec2-spot-fleet-tagging-role",
+  "AllocationStrategy": "diversified",
+  "TargetCapacity": 1,
+  "SpotPrice": "0.24",
+  "ValidFrom": "2018-10-07T18:36:01Z",
+  "ValidUntil": "2107-01-01T19:36:01Z",
+  "TerminateInstancesWithExpiration": true,
+  "LaunchSpecifications": [
+    {
+      "ImageId": "ami-071104f3bf083047c",
+      "InstanceType": "c3.xlarge",
+      "KeyName": "xv-ocp-key",
+      "IamInstanceProfile": {
+        "Arn": "arn:aws:iam::803902225147:instance-profile/crossvale-ocp-NodeInstanceProfile-12Q4WCUKRKJC4"
+      },
+      "BlockDeviceMappings": [
+        {
+          "DeviceName": "/dev/sda1",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 50,
+            "SnapshotId": "snap-0f4b1c675d21607f2"
+          }
+        },
+        {
+          "DeviceName": "/dev/sdb",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 30,
+            "SnapshotId": "snap-0031d3504df131426"
+          }
+        }
+      ],
+      "UserData": "IyEvYmluL2Jhc2gKCnRpbWVkYXRlY3RsIHNldC10aW1lem9uZSBVVEMKCnN1YnNjcmlwdGlvbi1tYW5hZ2VyIHJlZ2lzdGVyIC0tdXNlcm5hbWU9Q3Jvc3N2YWxlT2ZmaWNlIC0tcGFzc3dvcmQ9cmVkSGF0UGFzczgKc3Vic2NyaXB0aW9uLW1hbmFnZXIgYXR0YWNoIC0tcG9vbD04YTg1Zjk4YjYyNjdjZjRiMDE2MjhiN2VjMWVhNDVlMw==",
+      "NetworkInterfaces": [
+        {
+          "DeviceIndex": 0,
+          "SubnetId": "subnet-c2627c8b",
+          "DeleteOnTermination": true,
+          "Groups": [
+            "sg-1e99a465"
+          ],
+          "AssociatePublicIpAddress": false
+        }
+      ],
+      "TagSpecifications": [
+        {
+          "ResourceType": "instance",
+          "Tags": [
+            {
+              "Key": "clusterid",
+              "Value": "crossvale-ocp"
+            },
+            {
+              "Key": "openshift-role",
+              "Value": "app"
+            },
+            {
+              "Key": "KubernetesCluster",
+              "Value": "crossvale-ocp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ImageId": "ami-071104f3bf083047c",
+      "InstanceType": "c3.xlarge",
+      "KeyName": "xv-ocp-key",
+      "IamInstanceProfile": {
+        "Arn": "arn:aws:iam::803902225147:instance-profile/crossvale-ocp-NodeInstanceProfile-12Q4WCUKRKJC4"
+      },
+      "BlockDeviceMappings": [
+        {
+          "DeviceName": "/dev/sda1",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 50,
+            "SnapshotId": "snap-0f4b1c675d21607f2"
+          }
+        },
+        {
+          "DeviceName": "/dev/sdb",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 30,
+            "SnapshotId": "snap-0031d3504df131426"
+          }
+        }
+      ],
+      "UserData": "IyEvYmluL2Jhc2gKCnRpbWVkYXRlY3RsIHNldC10aW1lem9uZSBVVEMKCnN1YnNjcmlwdGlvbi1tYW5hZ2VyIHJlZ2lzdGVyIC0tdXNlcm5hbWU9Q3Jvc3N2YWxlT2ZmaWNlIC0tcGFzc3dvcmQ9cmVkSGF0UGFzczgKc3Vic2NyaXB0aW9uLW1hbmFnZXIgYXR0YWNoIC0tcG9vbD04YTg1Zjk4YjYyNjdjZjRiMDE2MjhiN2VjMWVhNDVlMw==",
+      "NetworkInterfaces": [
+        {
+          "DeviceIndex": 0,
+          "SubnetId": "subnet-47cd9a1c",
+          "DeleteOnTermination": true,
+          "Groups": [
+            "sg-1e99a465"
+          ],
+          "AssociatePublicIpAddress": false
+        }
+      ],
+      "TagSpecifications": [
+        {
+          "ResourceType": "instance",
+          "Tags": [
+            {
+              "Key": "clusterid",
+              "Value": "crossvale-ocp"
+            },
+            {
+              "Key": "openshift-role",
+              "Value": "app"
+            },
+            {
+              "Key": "KubernetesCluster",
+              "Value": "crossvale-ocp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ImageId": "ami-071104f3bf083047c",
+      "InstanceType": "c3.xlarge",
+      "KeyName": "xv-ocp-key",
+      "IamInstanceProfile": {
+        "Arn": "arn:aws:iam::803902225147:instance-profile/crossvale-ocp-NodeInstanceProfile-12Q4WCUKRKJC4"
+      },
+      "BlockDeviceMappings": [
+        {
+          "DeviceName": "/dev/sda1",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 50,
+            "SnapshotId": "snap-0f4b1c675d21607f2"
+          }
+        },
+        {
+          "DeviceName": "/dev/sdb",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 30,
+            "SnapshotId": "snap-0031d3504df131426"
+          }
+        }
+      ],
+      "UserData": "IyEvYmluL2Jhc2gKCnRpbWVkYXRlY3RsIHNldC10aW1lem9uZSBVVEMKCnN1YnNjcmlwdGlvbi1tYW5hZ2VyIHJlZ2lzdGVyIC0tdXNlcm5hbWU9Q3Jvc3N2YWxlT2ZmaWNlIC0tcGFzc3dvcmQ9cmVkSGF0UGFzczgKc3Vic2NyaXB0aW9uLW1hbmFnZXIgYXR0YWNoIC0tcG9vbD04YTg1Zjk4YjYyNjdjZjRiMDE2MjhiN2VjMWVhNDVlMw==",
+      "NetworkInterfaces": [
+        {
+          "DeviceIndex": 0,
+          "SubnetId": "subnet-5e131939",
+          "DeleteOnTermination": true,
+          "Groups": [
+            "sg-1e99a465"
+          ],
+          "AssociatePublicIpAddress": false
+        }
+      ],
+      "TagSpecifications": [
+        {
+          "ResourceType": "instance",
+          "Tags": [
+            {
+              "Key": "clusterid",
+              "Value": "crossvale-ocp"
+            },
+            {
+              "Key": "openshift-role",
+              "Value": "app"
+            },
+            {
+              "Key": "KubernetesCluster",
+              "Value": "crossvale-ocp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ImageId": "ami-071104f3bf083047c",
+      "InstanceType": "c4.xlarge",
+      "KeyName": "xv-ocp-key",
+      "IamInstanceProfile": {
+        "Arn": "arn:aws:iam::803902225147:instance-profile/crossvale-ocp-NodeInstanceProfile-12Q4WCUKRKJC4"
+      },
+      "BlockDeviceMappings": [
+        {
+          "DeviceName": "/dev/sda1",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 50,
+            "SnapshotId": "snap-0f4b1c675d21607f2"
+          }
+        },
+        {
+          "DeviceName": "/dev/sdb",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 30,
+            "SnapshotId": "snap-0031d3504df131426"
+          }
+        }
+      ],
+      "UserData": "IyEvYmluL2Jhc2gKCnRpbWVkYXRlY3RsIHNldC10aW1lem9uZSBVVEMKCnN1YnNjcmlwdGlvbi1tYW5hZ2VyIHJlZ2lzdGVyIC0tdXNlcm5hbWU9Q3Jvc3N2YWxlT2ZmaWNlIC0tcGFzc3dvcmQ9cmVkSGF0UGFzczgKc3Vic2NyaXB0aW9uLW1hbmFnZXIgYXR0YWNoIC0tcG9vbD04YTg1Zjk4YjYyNjdjZjRiMDE2MjhiN2VjMWVhNDVlMw==",
+      "NetworkInterfaces": [
+        {
+          "DeviceIndex": 0,
+          "SubnetId": "subnet-c2627c8b",
+          "DeleteOnTermination": true,
+          "Groups": [
+            "sg-1e99a465"
+          ],
+          "AssociatePublicIpAddress": false
+        }
+      ],
+      "TagSpecifications": [
+        {
+          "ResourceType": "instance",
+          "Tags": [
+            {
+              "Key": "clusterid",
+              "Value": "crossvale-ocp"
+            },
+            {
+              "Key": "openshift-role",
+              "Value": "app"
+            },
+            {
+              "Key": "KubernetesCluster",
+              "Value": "crossvale-ocp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ImageId": "ami-071104f3bf083047c",
+      "InstanceType": "c4.xlarge",
+      "KeyName": "xv-ocp-key",
+      "IamInstanceProfile": {
+        "Arn": "arn:aws:iam::803902225147:instance-profile/crossvale-ocp-NodeInstanceProfile-12Q4WCUKRKJC4"
+      },
+      "BlockDeviceMappings": [
+        {
+          "DeviceName": "/dev/sda1",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 50,
+            "SnapshotId": "snap-0f4b1c675d21607f2"
+          }
+        },
+        {
+          "DeviceName": "/dev/sdb",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 30,
+            "SnapshotId": "snap-0031d3504df131426"
+          }
+        }
+      ],
+      "UserData": "IyEvYmluL2Jhc2gKCnRpbWVkYXRlY3RsIHNldC10aW1lem9uZSBVVEMKCnN1YnNjcmlwdGlvbi1tYW5hZ2VyIHJlZ2lzdGVyIC0tdXNlcm5hbWU9Q3Jvc3N2YWxlT2ZmaWNlIC0tcGFzc3dvcmQ9cmVkSGF0UGFzczgKc3Vic2NyaXB0aW9uLW1hbmFnZXIgYXR0YWNoIC0tcG9vbD04YTg1Zjk4YjYyNjdjZjRiMDE2MjhiN2VjMWVhNDVlMw==",
+      "NetworkInterfaces": [
+        {
+          "DeviceIndex": 0,
+          "SubnetId": "subnet-47cd9a1c",
+          "DeleteOnTermination": true,
+          "Groups": [
+            "sg-1e99a465"
+          ],
+          "AssociatePublicIpAddress": false
+        }
+      ],
+      "TagSpecifications": [
+        {
+          "ResourceType": "instance",
+          "Tags": [
+            {
+              "Key": "clusterid",
+              "Value": "crossvale-ocp"
+            },
+            {
+              "Key": "openshift-role",
+              "Value": "app"
+            },
+            {
+              "Key": "KubernetesCluster",
+              "Value": "crossvale-ocp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ImageId": "ami-071104f3bf083047c",
+      "InstanceType": "c4.xlarge",
+      "KeyName": "xv-ocp-key",
+      "IamInstanceProfile": {
+        "Arn": "arn:aws:iam::803902225147:instance-profile/crossvale-ocp-NodeInstanceProfile-12Q4WCUKRKJC4"
+      },
+      "BlockDeviceMappings": [
+        {
+          "DeviceName": "/dev/sda1",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 50,
+            "SnapshotId": "snap-0f4b1c675d21607f2"
+          }
+        },
+        {
+          "DeviceName": "/dev/sdb",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 30,
+            "SnapshotId": "snap-0031d3504df131426"
+          }
+        }
+      ],
+      "UserData": "IyEvYmluL2Jhc2gKCnRpbWVkYXRlY3RsIHNldC10aW1lem9uZSBVVEMKCnN1YnNjcmlwdGlvbi1tYW5hZ2VyIHJlZ2lzdGVyIC0tdXNlcm5hbWU9Q3Jvc3N2YWxlT2ZmaWNlIC0tcGFzc3dvcmQ9cmVkSGF0UGFzczgKc3Vic2NyaXB0aW9uLW1hbmFnZXIgYXR0YWNoIC0tcG9vbD04YTg1Zjk4YjYyNjdjZjRiMDE2MjhiN2VjMWVhNDVlMw==",
+      "NetworkInterfaces": [
+        {
+          "DeviceIndex": 0,
+          "SubnetId": "subnet-5e131939",
+          "DeleteOnTermination": true,
+          "Groups": [
+            "sg-1e99a465"
+          ],
+          "AssociatePublicIpAddress": false
+        }
+      ],
+      "TagSpecifications": [
+        {
+          "ResourceType": "instance",
+          "Tags": [
+            {
+              "Key": "clusterid",
+              "Value": "crossvale-ocp"
+            },
+            {
+              "Key": "openshift-role",
+              "Value": "app"
+            },
+            {
+              "Key": "KubernetesCluster",
+              "Value": "crossvale-ocp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ImageId": "ami-071104f3bf083047c",
+      "InstanceType": "c5.xlarge",
+      "KeyName": "xv-ocp-key",
+      "IamInstanceProfile": {
+        "Arn": "arn:aws:iam::803902225147:instance-profile/crossvale-ocp-NodeInstanceProfile-12Q4WCUKRKJC4"
+      },
+      "BlockDeviceMappings": [
+        {
+          "DeviceName": "/dev/sda1",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 50,
+            "SnapshotId": "snap-0f4b1c675d21607f2"
+          }
+        },
+        {
+          "DeviceName": "/dev/sdb",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 30,
+            "SnapshotId": "snap-0031d3504df131426"
+          }
+        }
+      ],
+      "UserData": "IyEvYmluL2Jhc2gKCnRpbWVkYXRlY3RsIHNldC10aW1lem9uZSBVVEMKCnN1YnNjcmlwdGlvbi1tYW5hZ2VyIHJlZ2lzdGVyIC0tdXNlcm5hbWU9Q3Jvc3N2YWxlT2ZmaWNlIC0tcGFzc3dvcmQ9cmVkSGF0UGFzczgKc3Vic2NyaXB0aW9uLW1hbmFnZXIgYXR0YWNoIC0tcG9vbD04YTg1Zjk4YjYyNjdjZjRiMDE2MjhiN2VjMWVhNDVlMw==",
+      "NetworkInterfaces": [
+        {
+          "DeviceIndex": 0,
+          "SubnetId": "subnet-c2627c8b",
+          "DeleteOnTermination": true,
+          "Groups": [
+            "sg-1e99a465"
+          ],
+          "AssociatePublicIpAddress": false
+        }
+      ],
+      "TagSpecifications": [
+        {
+          "ResourceType": "instance",
+          "Tags": [
+            {
+              "Key": "clusterid",
+              "Value": "crossvale-ocp"
+            },
+            {
+              "Key": "openshift-role",
+              "Value": "app"
+            },
+            {
+              "Key": "KubernetesCluster",
+              "Value": "crossvale-ocp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ImageId": "ami-071104f3bf083047c",
+      "InstanceType": "c5.xlarge",
+      "KeyName": "xv-ocp-key",
+      "IamInstanceProfile": {
+        "Arn": "arn:aws:iam::803902225147:instance-profile/crossvale-ocp-NodeInstanceProfile-12Q4WCUKRKJC4"
+      },
+      "BlockDeviceMappings": [
+        {
+          "DeviceName": "/dev/sda1",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 50,
+            "SnapshotId": "snap-0f4b1c675d21607f2"
+          }
+        },
+        {
+          "DeviceName": "/dev/sdb",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 30,
+            "SnapshotId": "snap-0031d3504df131426"
+          }
+        }
+      ],
+      "UserData": "IyEvYmluL2Jhc2gKCnRpbWVkYXRlY3RsIHNldC10aW1lem9uZSBVVEMKCnN1YnNjcmlwdGlvbi1tYW5hZ2VyIHJlZ2lzdGVyIC0tdXNlcm5hbWU9Q3Jvc3N2YWxlT2ZmaWNlIC0tcGFzc3dvcmQ9cmVkSGF0UGFzczgKc3Vic2NyaXB0aW9uLW1hbmFnZXIgYXR0YWNoIC0tcG9vbD04YTg1Zjk4YjYyNjdjZjRiMDE2MjhiN2VjMWVhNDVlMw==",
+      "NetworkInterfaces": [
+        {
+          "DeviceIndex": 0,
+          "SubnetId": "subnet-47cd9a1c",
+          "DeleteOnTermination": true,
+          "Groups": [
+            "sg-1e99a465"
+          ],
+          "AssociatePublicIpAddress": false
+        }
+      ],
+      "TagSpecifications": [
+        {
+          "ResourceType": "instance",
+          "Tags": [
+            {
+              "Key": "clusterid",
+              "Value": "crossvale-ocp"
+            },
+            {
+              "Key": "openshift-role",
+              "Value": "app"
+            },
+            {
+              "Key": "KubernetesCluster",
+              "Value": "crossvale-ocp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ImageId": "ami-071104f3bf083047c",
+      "InstanceType": "c5.xlarge",
+      "KeyName": "xv-ocp-key",
+      "IamInstanceProfile": {
+        "Arn": "arn:aws:iam::803902225147:instance-profile/crossvale-ocp-NodeInstanceProfile-12Q4WCUKRKJC4"
+      },
+      "BlockDeviceMappings": [
+        {
+          "DeviceName": "/dev/sda1",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 50,
+            "SnapshotId": "snap-0f4b1c675d21607f2"
+          }
+        },
+        {
+          "DeviceName": "/dev/sdb",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "VolumeType": "gp2",
+            "VolumeSize": 30,
+            "SnapshotId": "snap-0031d3504df131426"
+          }
+        }
+      ],
+      "UserData": "IyEvYmluL2Jhc2gKCnRpbWVkYXRlY3RsIHNldC10aW1lem9uZSBVVEMKCnN1YnNjcmlwdGlvbi1tYW5hZ2VyIHJlZ2lzdGVyIC0tdXNlcm5hbWU9Q3Jvc3N2YWxlT2ZmaWNlIC0tcGFzc3dvcmQ9cmVkSGF0UGFzczgKc3Vic2NyaXB0aW9uLW1hbmFnZXIgYXR0YWNoIC0tcG9vbD04YTg1Zjk4YjYyNjdjZjRiMDE2MjhiN2VjMWVhNDVlMw==",
+      "NetworkInterfaces": [
+        {
+          "DeviceIndex": 0,
+          "SubnetId": "subnet-5e131939",
+          "DeleteOnTermination": true,
+          "Groups": [
+            "sg-1e99a465"
+          ],
+          "AssociatePublicIpAddress": false
+        }
+      ],
+      "TagSpecifications": [
+        {
+          "ResourceType": "instance",
+          "Tags": [
+            {
+              "Key": "clusterid",
+              "Value": "crossvale-ocp"
+            },
+            {
+              "Key": "openshift-role",
+              "Value": "app"
+            },
+            {
+              "Key": "KubernetesCluster",
+              "Value": "crossvale-ocp"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "Type": "maintain"
+}

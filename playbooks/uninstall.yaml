@@ -1,0 +1,20 @@
+---
+- hosts: seed-hosts[0]
+  gather_facts: False
+  serial: 1
+  tasks:
+
+  - name: Load variable files
+    include_vars:
+      dir: "{{ params_dir }}/"
+      depth: 1
+      extensions:
+        - yaml
+        - yml
+
+  - name: Check access to the target OCP environment...
+    shell: "oc login --token={{ocp_token}} --server={{ocp_url}}"
+
+  # The CRDs are not deleted so in case there is more than one deployment in the same OCP cluster
+  - name: Delete OCB's project...
+    shell: "oc delete project {{ocb_project_name}} --server={{ocp_url}}"

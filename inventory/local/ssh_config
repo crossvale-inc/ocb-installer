@@ -1,0 +1,11 @@
+ServerAliveInterval 60
+Host *.compute.internal
+    ProxyCommand             ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/ssh-privatekey ec2-user@bastion.mypublicdomainname.com -W %h:%p
+    User                     ec2-user
+    StrictHostKeyChecking    no
+    CheckHostIP              no
+    ForwardAgent             yes
+    IdentityFile             ~/.ssh/ssh-privatekey
+    ControlMaster            auto
+    ControlPersist           600s
+    ControlPath              /tmp/controlpath/%r@%h:%p

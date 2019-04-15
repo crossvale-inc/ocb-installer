@@ -1,0 +1,16 @@
+---
+ui_openshift_cluster_content:
+- object: deployment
+  content:
+  - name: "Deploy OCB's UI microservice"
+    template: "{{ templates_dir }}/ocb-ui-template.yaml"
+    action: apply
+    params_from_vars:
+      OCB_PROJECT_NAME: "{{ocb_project_name}}"
+      OCB_VERSION: "{{ocb_version}}"
+      OCB_DOCKER_REGISTRY_URL: "{{registry_url}}"
+      OCB_UI_RELATIVE_IMAGE_PATH: "{{registry_ui_relative_path}}"
+      OCB_SERVICE_ACCOUNT: "{{ocb_service_account}}"
+    namespace: "{{ ocb_project_name }}"
+    tags:
+      - ocb-ui

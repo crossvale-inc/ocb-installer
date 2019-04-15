@@ -1,0 +1,3 @@
+openshift-applier/**/*
+skopeo-downloader/**/*
+*.retry

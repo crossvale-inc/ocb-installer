@@ -1,0 +1,53 @@
+[seed-hosts]
+localhost ansible_connection=local
+
+[seed-hosts:vars]
+
+# Directories
+templates_dir='{{ inventory_dir }}/../../templates'
+params_dir='{{ inventory_dir }}/../../params'
+roles_dir='{{ inventory_dir }}/../../playbooks/roles'
+
+######### OCP Vars ################
+ocp_url=''
+ocp_username=''
+ocp_token=''
+
+########## aws access ################
+aws_access_key_id=''
+aws_secret_access_key=''
+
+######### OCB Project Vars ######################
+ocb_project_name=''
+ocb_project_display_name="OCB :: Crossavle CloudBalancer"
+ocb_service_account=ocb-system
+ocb_version=v0.124
+
+######### Trusted Docker registry where OCP will pull from ##################
+registry_url=''
+registry_username=''
+registry_password=''
+registry_auth={{ (registry_username + ':' + registry_password) | b64encode }}
+registry_backend_relative_path='ocb/ocb-backend'
+registry_ui_relative_path='ocb/ocb-ui'
+registry_proxy_relative_path='ocb/ocb-proxy'
+
+######### Remote Docker registry where OCB images are located ###############
+source_registry_url='dri.crossvale-ocp.com:443'
+source_registry_username=''
+source_registry_password=''
+source_registry_backend_relative_path='ocb/ocb-backend'
+source_registry_ui_relative_path='ocb/ocb-ui'
+source_registry_proxy_relative_path='ocb/ocb-proxy'
+
+############# Config vars ########################
+ocb_backend_inventory_file_path='{{ inventory_dir }}/inventory'
+ocb_backend_config_file_path='{{ inventory_dir }}/config.js'
+ocb_backend_sshconfig_file_path='{{ inventory_dir }}/ssh_config'
+ocb_backend_fleet_templates_folder_path='{{ inventory_dir }}/fleet_templates/'
+
+# 26 characteres (random and unique for this deployment)
+ocb_proxy_cookie_secret=''
+# 26 characteres (random and unique for this deployment)
+ocb_proxy_client_secret=''
+ocb_proxy_public_url=''

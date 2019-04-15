@@ -1,0 +1,69 @@
+---
+- hosts: seed-hosts[0]
+  gather_facts: False
+  serial: 1
+  tasks:
+
+  - name: Load variable files
+    include_vars:
+      dir: "{{ params_dir }}/"
+      depth: 1
+      extensions:
+        - yaml
+        - yml
+
+  - name: Check access to the target OCP environment...
+    shell: "oc login --token={{ocp_token}} --server={{ocp_url}}"
+
+  - name: Ensure OCB's prerequisites before starting the deployment...
+    include_role:
+      name: openshift-applier/roles/openshift-applier
+    vars:
+      openshift_cluster_content: '{{prerequisites_openshift_cluster_content}}'
+
+  - name: Ensure OCB's project is created and properly provisioned...
+    include_role:
+      name: openshift-applier/roles/openshift-applier
+    vars:
+      openshift_cluster_content: '{{project_openshift_cluster_content}}'
+
+  - name: "Delete OCB's configuration configmap"
+    shell: "oc delete configmap {{ocb_config_cm_name}} -n {{ocb_project_name}} --server={{ocp_url}}"
+    ignore_errors: True
+
+  - name: "Create OCB's configuration configmap"
+    shell: "oc create configmap {{ocb_config_cm_name}} --from-file=inventory={{ocb_backend_inventory_file_path}} --from-file=config.js={{ocb_backend_config_file_path}} --from-file=ssh_config={{ocb_backend_sshconfig_file_path}} -n {{ocb_project_name}} --server={{ocp_url}}"
+
+  - name: "Delete OCB's fleets templates configmap"
+    shell: "oc delete configmap {{ocb_fleets_templates_cm_name}} -n {{ocb_project_name}} --server={{ocp_url}}"
+    ignore_errors: True
+
+  - name: "Create OCB's fleets templates configmap"
+    shell: "oc create configmap ocb-fleet-templates --from-file={{ocb_backend_fleet_templates_folder_path}} -n {{ocb_project_name}} --server={{ocp_url}}"
+
+  - name: "Pull the latest backend image into the internal docker registry"
+    shell: "oc import-image ocb-backend:{{ocb_version}} --from={{registry_url}}/{{registry_backend_relative_path}}:{{ocb_version}} --confirm -n {{ocb_project_name}} --server={{ocp_url}}"
+
+  - name: Deploy OCB's backend and all its dependencies...
+    include_role:
+      name: openshift-applier/roles/openshift-applier
+    vars:
+      openshift_cluster_content: '{{backend_openshift_cluster_content}}'
+
+  - name: "Pull the latest ui image into the internal docker registry"
+    shell: "oc import-image ocb-ui:{{ocb_version}} --from={{registry_url}}/{{registry_ui_relative_path}}:{{ocb_version}} --confirm -n {{ocb_project_name}} --server={{ocp_url}}"
+
+  - name: Deploy OCB's UI and all its dependencies...
+    include_role:
+      name: openshift-applier/roles/openshift-applier
+    vars:
+      openshift_cluster_content: '{{ui_openshift_cluster_content}}'
+
+  - name: "Pull the latest proxy image into the internal docker registry"
+    shell: "oc import-image ocb-proxy:{{ocb_version}} --from={{registry_url}}/{{registry_proxy_relative_path}}:{{ocb_version}} --confirm -n {{ocb_project_name}} --server={{ocp_url}}"
+
+  - name: Deploy OCB's OAuth Proxy and all its dependencies...
+    include_role:
+      name: openshift-applier/roles/openshift-applier
+    vars:
+      openshift_cluster_content: '{{proxy_openshift_cluster_content}}'

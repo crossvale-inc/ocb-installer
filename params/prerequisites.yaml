@@ -1,0 +1,29 @@
+---
+prerequisites_openshift_cluster_content:
+- object: object
+  content:
+  - name: Confirm the latest definition of the CRDs that OCB needs
+    template: "{{ templates_dir }}/ocb-prerequisites.yaml"
+    action: apply
+    tags:
+      - prerequisites
+
+skopeo_ocb_images:
+  - name: "ocb-backend"
+    version: "{{ocb_version}}"
+    src_credentials: "{{ (source_registry_username + ':' + source_registry_password) }}"
+    dest_credentials: "{{ (registry_username + ':' + registry_password) }}"
+    src_image_stream_tag: "{{source_registry_url}}/{{source_registry_backend_relative_path}}:{{ocb_version}}"
+    dest_image_stream_tag: "{{registry_url}}/{{registry_backend_relative_path}}:{{ocb_version}}"
+  - name: "ocb-ui"
+    version: "{{ocb_version}}"
+    src_credentials: "{{ (source_registry_username + ':' + source_registry_password) }}"
+    dest_credentials: "{{ (registry_username + ':' + registry_password) }}"
+    src_image_stream_tag: "{{source_registry_url}}/{{source_registry_ui_relative_path}}:{{ocb_version}}"
+    dest_image_stream_tag: "{{registry_url}}/{{registry_ui_relative_path}}:{{ocb_version}}"
+  - name: "ocb-proxy"
+    version: "{{ocb_version}}"
+    src_credentials: "{{ (source_registry_username + ':' + source_registry_password) }}"
+    dest_credentials: "{{ (registry_username + ':' + registry_password) }}"
+    src_image_stream_tag: "{{source_registry_url}}/{{source_registry_proxy_relative_path}}:{{ocb_version}}"
+    dest_image_stream_tag: "{{registry_url}}/{{registry_proxy_relative_path}}:{{ocb_version}}"

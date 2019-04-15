@@ -1,0 +1,21 @@
+---
+ocb_config_cm_name: 'ocb-config'
+ocb_fleets_templates_cm_name: 'ocb-fleet-templates'
+backend_openshift_cluster_content:
+- object: deployment
+  content:
+  - name: "Deploy OCB's backend microservice"
+    template: "{{ templates_dir }}/ocb-backend-template.yaml"
+    action: apply
+    params_from_vars:
+      OCB_PROJECT_NAME: "{{ocb_project_name}}"
+      OCB_AWS_ACCESS_KEY_ID: "{{aws_access_key_id}}"
+      OCB_AWS_SECRET_ACCESS_KEY: "{{aws_secret_access_key}}"
+      OCB_VERSION: "{{ocb_version}}"
+      OCB_DOCKER_REGISTRY_URL: "{{registry_url}}"
+      OCB_BACKEND_RELATIVE_IMAGE_PATH: "{{registry_backend_relative_path}}"
+      OAUTH_PROXY_COOKIE_SECRET: "{{ocb_proxy_cookie_secret}}"
+      OCB_SERVICE_ACCOUNT: "{{ocb_service_account}}"
+    namespace: "{{ ocb_project_name }}"
+    tags:
+      - ocb-backend

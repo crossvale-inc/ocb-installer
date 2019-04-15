@@ -1,0 +1,163 @@
+apiVersion:                            v1
+kind:                                  Template
+metadata:
+  name:                                ocb-backend-template
+labels:
+  app:                                 ocb
+objects:
+- apiVersion:                          v1
+  data:
+    accessKeyId:                       ${OCB_AWS_ACCESS_KEY_ID}
+    secretAccessKey:                   ${OCB_AWS_SECRET_ACCESS_KEY}
+  kind:                                Secret
+  metadata:
+    name:                              aws-credentials
+    namespace:                         ${OCB_PROJECT_NAME}
+  type:                                Opaque
+- apiVersion:                          v1
+  kind:                                ImageStream
+  metadata:
+    name:                              ocb-backend
+    namespace:                         ${OCB_PROJECT_NAME}
+  spec:
+    dockerImageRepository:             ${OCB_DOCKER_REGISTRY_URL}/${OCB_BACKEND_RELATIVE_IMAGE_PATH}
+- apiVersion:                          v1
+  kind:                                DeploymentConfig
+  metadata:
+    name:                              ocb-backend
+    namespace:                         ${OCB_PROJECT_NAME}
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      deploymentconfig: ocb-backend
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          deploymentconfig: ocb-backend
+      spec:
+        containers:
+          - env:
+              - name: SESSION_SECRET
+                value: ${OAUTH_PROXY_COOKIE_SECRET}
+              - name: AWS_ACCESS_KEY_ID
+                value: ${OCB_AWS_ACCESS_KEY_ID}
+              - name: AWS_SECRET_ACCESS_KEY
+                value: ${OCB_AWS_SECRET_ACCESS_KEY}
+            image: ''
+            imagePullPolicy: IfNotPresent
+            livenessProbe:
+              failureThreshold: 3
+              httpGet:
+                path: /api/cloud/fleetTemplates
+                port: 9000
+                scheme: HTTP
+              initialDelaySeconds: 120
+              periodSeconds: 10
+              successThreshold: 1
+              timeoutSeconds: 3
+            name: ocb-backend
+            ports:
+              - containerPort: 9000
+                protocol: TCP
+            readinessProbe:
+              failureThreshold: 3
+              httpGet:
+                path: /api/cloud/fleetTemplates
+                port: 9000
+                scheme: HTTP
+              initialDelaySeconds: 15
+              periodSeconds: 10
+              successThreshold: 1
+              timeoutSeconds: 3
+            resources:
+              limits:
+                cpu: 300m
+                memory: 1Gi
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            volumeMounts:
+              - mountPath: /opt/app-root/src/config/
+                name: ocb-configmap-config
+              - mountPath: /opt/app-root/src/templates/
+                name: ocb-configmap-fleet-templates
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: ${OCB_SERVICE_ACCOUNT}
+        serviceAccountName: ${OCB_SERVICE_ACCOUNT}
+        terminationGracePeriodSeconds: 30
+        volumes:
+          - configMap:
+              defaultMode: 420
+              name: ocb-config
+            name: ocb-configmap-config
+          - configMap:
+              defaultMode: 420
+              name: ocb-fleet-templates
+            name: ocb-configmap-fleet-templates
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic:                     true
+        containerNames:
+        - ocb-backend
+        from:
+          kind:                        ImageStreamTag
+          name:                        ocb-backend:${OCB_VERSION}
+          namespace:                   ${OCB_PROJECT_NAME}
+      type:                            ImageChange
+- apiVersion:                          v1
+  kind:                                Service
+  metadata:
+    labels:
+    name:                              ocb-backend
+    namespace:                         ${OCB_PROJECT_NAME}
+  spec:
+    ports:
+    - name:                            9000-tcp
+      port:                            9000
+      protocol:                        TCP
+      targetPort:                      9000
+    selector:
+      deploymentconfig:                ocb-backend
+    sessionAffinity:                   None
+    type:                              ClusterIP
+parameters:
+  - description:                       Name of the project where OCB will be/is deployed in.
+    name:                              OCB_PROJECT_NAME
+    required:                          true
+    value:                             'ocb'
+  - description:                       Access key Id to connect to AWS services.
+    name:                              OCB_AWS_ACCESS_KEY_ID
+    required:                          true
+  - description:                       Secret access key to connect to AWS services.
+    name:                              OCB_AWS_SECRET_ACCESS_KEY
+    required:                          true
+  - description:                       OCB's version to deploy.
+    name:                              OCB_VERSION
+    required:                          true
+  - description:                       URL of the docker registry where to pull OCB images from.
+    name:                              OCB_DOCKER_REGISTRY_URL
+    required:                          true
+    value:                             'registry.dev2.crossvale-ocp.com:443'
+  - description:                       Relative URL of the docker registry where to pull Backend OCB's image from.
+    name:                              OCB_BACKEND_RELATIVE_IMAGE_PATH
+    required:                          true
+    value:                             'ocb/ocb-backend'
+  - description:                       The seed string for secure cookies (optionally base64 encoded)
+    name:                              OAUTH_PROXY_COOKIE_SECRET
+    required:                          true
+    value:                             'ashdfjhasdlkjfhalksdjhflak'
+  - description:                       Name of the service account to create with cluster-admin rights to run OCB.
+    name:                              OCB_SERVICE_ACCOUNT
+    required:                          true
+    value:                             'ocb-system'

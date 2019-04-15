@@ -1,0 +1,108 @@
+apiVersion:                            v1
+kind:                                  Template
+metadata:
+  name:                                ocb-ui-template
+labels:
+  app:                                 ocb
+objects:
+- apiVersion:                          v1
+  kind:                                ImageStream
+  metadata:
+    name:                              ocb-ui
+    namespace:                         ${OCB_PROJECT_NAME}
+  spec:
+    dockerImageRepository:             ${OCB_DOCKER_REGISTRY_URL}/${OCB_UI_RELATIVE_IMAGE_PATH}
+- apiVersion:                          v1
+  kind:                                DeploymentConfig
+  metadata:
+    name:                              ocb-ui
+    namespace:                         ${OCB_PROJECT_NAME}
+  spec:
+    replicas:                          1
+    selector:
+      deploymentconfig:                ocb-ui
+    strategy:
+      activeDeadlineSeconds:           21600
+      resources:                       {}
+      rollingParams:
+        intervalSeconds:               1
+        maxSurge:                      25%
+        maxUnavailable:                25%
+        timeoutSeconds:                600
+        updatePeriodSeconds:           1
+      type:                            Rolling
+    template:
+      metadata:
+        labels:
+          deploymentconfig:            ocb-ui
+      spec:
+        containers:
+        - image:                       ''
+          imagePullPolicy:             IfNotPresent
+          name:                        ocb-ui
+          ports:
+          - containerPort:             8080
+            protocol:                  TCP
+          - containerPort:             8443
+            protocol:                  TCP
+          resources:                   {}
+          terminationMessagePath:      /dev/termination-log
+          terminationMessagePolicy:    File
+        dnsPolicy:                     ClusterFirst
+        restartPolicy:                 Always
+        schedulerName:                 default-scheduler
+        securityContext:               {}
+        serviceAccount: ${OCB_SERVICE_ACCOUNT}
+        serviceAccountName: ${OCB_SERVICE_ACCOUNT}
+        terminationGracePeriodSeconds: 30
+    test:                              false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic:                     true
+        containerNames:
+        - ocb-ui
+        from:
+          kind:                        ImageStreamTag
+          name:                        ocb-ui:${OCB_VERSION}
+          namespace:                   ${OCB_PROJECT_NAME}
+      type:                            ImageChange
+- apiVersion:                          v1
+  kind:                                Service
+  metadata:
+    name:                              ocb-ui
+    namespace:                         ${OCB_PROJECT_NAME}
+  spec:
+    ports:
+    - name:                            8080-tcp
+      port:                            8080
+      protocol:                        TCP
+      targetPort:                      8080
+    - name:                            8443-tcp
+      port:                            8443
+      protocol:                        TCP
+      targetPort:                      8443
+    selector:
+      deploymentconfig:                ocb-ui
+    sessionAffinity:                   None
+    type:                              ClusterIP
+parameters:
+  - description:                       Name of the project where OCB will be/is deployed in.
+    name:                              OCB_PROJECT_NAME
+    required:                          true
+    value:                             'ocb'
+  - description:                       OCB's version to deploy.
+    name:                              OCB_VERSION
+    required:                          true
+  - description:                       URL of the docker registry where to pull OCB images from.
+    name:                              OCB_DOCKER_REGISTRY_URL
+    required:                          true
+    value:                             'registry.dev2.crossvale-ocp.com:443'
+  - description:                       Relative URL of the docker registry where to pull UI OCB's image from.
+    name:                              OCB_UI_RELATIVE_IMAGE_PATH
+    required:                          true
+    value:                             'ocb/ocb-ui'
+  - description:                       Name of the service account to create with cluster-admin rights to run OCB.
+    name:                              OCB_SERVICE_ACCOUNT
+    required:                          true
+    value:                             'ocb-system'

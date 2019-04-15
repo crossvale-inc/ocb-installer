@@ -1,0 +1,19 @@
+---
+proxy_openshift_cluster_content:
+- object: deployment
+  content:
+  - name: "Deploy OCB's OAuth Proxy microservice"
+    template: "{{ templates_dir }}/ocb-proxy-template.yaml"
+    action: apply
+    params_from_vars:
+      OCB_PROJECT_NAME: "{{ocb_project_name}}"
+      OAUTH_PROXY_VERSION: "{{ocb_version}}"
+      REDHAT_DOCKER_REGISTRY_URL: "{{registry_url}}"
+      REDHAT_PROXY_RELATIVE_IMAGE_PATH: "{{registry_proxy_relative_path}}"
+      OAUTH_PROXY_CLIENT_SECRET: "{{ocb_proxy_client_secret}}"
+      OAUTH_PROXY_COOKIE_SECRET: "{{ocb_proxy_cookie_secret}}"
+      OCB_PUBLIC_HOSTNAME: "{{ocb_proxy_public_url}}"
+      OCB_SERVICE_ACCOUNT: "{{ocb_service_account}}"
+    namespace: "{{ ocb_project_name }}"
+    tags:
+      - ocb-proxy

@@ -1,0 +1,7 @@
+[{
+  "id": "general-purpose",
+  "name": "General compute nodes",
+  "cloudType": "aws",
+  "region": "us-east-2",
+  "file": "general-template.json"
+}]

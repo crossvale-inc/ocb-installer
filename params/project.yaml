@@ -1,0 +1,18 @@
+---
+project_openshift_cluster_content:
+- object: project
+  content:
+  - name: "Create project and namespaced dependencies where OCB will be deployed"
+    template: "{{ templates_dir }}/ocb-project-template.yaml"
+    action: apply
+    params_from_vars:
+      OCB_PROJECT_NAME: "{{ocb_project_name}}"
+      OCB_PROJECT_DISPLAY_NAME: "{{ocb_project_display_name}}"
+      OCB_SERVICE_ACCOUNT: "{{ocb_service_account}}"
+      OCB_DOCKER_REGISTRY_URL: "{{registry_url}}"
+      OCB_DOCKER_REGISTRY_USERNAME: "{{registry_username}}"
+      OCB_DOCKER_REGISTRY_PASSWORD: "{{registry_password}}"
+      OCB_DOCKER_REGISTRY_AUTH: "{{registry_auth}}"
+    namespace: "{{ ocb_project_name }}"
+    tags:
+      - project
