@@ -25,6 +25,7 @@ ocb_version=v0.124
 
 ######### Trusted Docker registry where OCP will pull from ##################
 registry_url=''
+registry_email='account@server.com'
 registry_username=''
 registry_password=''
 registry_auth={{ (registry_username + ':' + registry_password) | b64encode }}
@@ -33,7 +34,10 @@ registry_ui_relative_path='ocb/ocb-ui'
 registry_proxy_relative_path='ocb/ocb-proxy'
 
 ######### Remote Docker registry where OCB images are located ###############
+# only valid modes: docker/skopeo
+images_import_mode=docker
 source_registry_url='dri.crossvale-ocp.com:443'
+source_registry_email='account@server.com'
 source_registry_username=''
 source_registry_password=''
 source_registry_backend_relative_path='ocb/ocb-backend'

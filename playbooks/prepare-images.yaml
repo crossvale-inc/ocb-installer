@@ -12,12 +12,9 @@
         - yaml
         - yml
 
-  - name: Check that Skopeo is locally installed...
-    shell: "skopeo --version"
-
   - name: Download docker image for all OCB microservices
     include_role:
-      name: skopeo-downloader
-    with_items: "{{ skopeo_ocb_images }}"
+      name: docker-importer
+    with_items: "{{ ocb_images }}"
     loop_control:
       loop_var: entry

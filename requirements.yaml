@@ -3,7 +3,7 @@
   scm: git
   src: https://github.com/crossvale-inc/openshift-applier
   version: v2.0.9
-- name: skopeo-downloader
+- name: docker-importer
   scm: git
-  src: https://github.com/crossvale-inc/skopeo-downloader
-  version: v0.1
+  src: https://github.com/crossvale-inc/docker-importer
+  version: v0.2
